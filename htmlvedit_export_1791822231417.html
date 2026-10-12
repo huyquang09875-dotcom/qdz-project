@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>QDZ Project - Thuê Bot Free Fire</title>
+
+<style>
+*{box-sizing:border-box}
+:root{--purple:#6254c9;--bg:#f3f5f9;--green:#15966c;--red:#df282d}
+body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#202938}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+header{background:white;padding:18px 16px;border-bottom:1px solid #e7e9ef;position:sticky;top:0;z-index:5}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-size:20px;font-weight:850;color:var(--purple)}
+.sub{font-size:12px;color:#89909e;margin-top:4px}
+.wrap{max-width:650px;margin:auto;padding:14px}
+.card{background:white;border:1px solid #e3e6ec;border-radius:17px;padding:17px;margin-bottom:14px;box-shadow:0 2px 5px #17203305}
+h1{font-size:23px;margin:0 0 7px}
+h2{font-size:17px;margin:0 0 13px}
+h3{font-size:16px;margin:0 0 8px}
+p{margin:5px 0;color:#737d8c;font-size:14px;line-height:1.5}
+.section-title{font-size:14px;font-weight:800;color:#737d8c;margin:22px 0 12px}
+.bot{border:2px solid #e6e8ed;border-radius:17px;padding:15px;margin-bottom:13px;background:white;cursor:pointer}
+.bot.active{border-color:var(--purple);background:#f8f8ff}
+.bottop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.tag{font-size:12px;padding:5px 9px;border-radius:6px;background:#e5edff;color:#345d9b;font-weight:700}
+.hot{background:#f6e8fb;color:#80419b}
+.vip{background:#fff0c9;color:#93691d}
+.price{font-size:14px;color:#7d8796;margin-top:7px}
+.desc{font-size:13px;color:#7c4a9b;margin-top:7px}
+.durations{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.duration{background:#fff;border:1px solid #e3e6ec;border-radius:16px;padding:12px 6px;text-align:center;color:#354052}
+.duration strong{display:block;margin-bottom:5px}
+.duration small{color:#7d8796}
+.duration.active{border-color:var(--purple);background:#f5f5ff;color:var(--purple);box-shadow:inset 0 0 0 1px #6254c955}
+.customday{display:flex;align-items:center;gap:8px;margin:14px 0;color:#7d8796;font-size:14px;flex-wrap:wrap}
+input{border:1px solid #dfe3eb;border-radius:11px;padding:12px;background:white;color:#202938;min-width:0}
+.customday input{width:105px;font-weight:700}
+.btn{border:0;border-radius:11px;padding:12px 15px;font-weight:750;background:var(--purple);color:white}
+.btn:active{opacity:.8}
+.btn.full{width:100%}
+.btn.red{background:var(--red)}
+.btn.light{background:#efefff;color:var(--purple)}
+.btn.green{background:var(--green)}
+.wallet{background:#f8fafc;border:1px solid #e0e5ec;border-radius:17px;padding:16px}
+.line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0}
+.line+.line{border-top:1px solid #e1e5eb}
+.total{font-size:25px;color:var(--green);font-weight:900}
+.warning{color:#bf4145;font-size:14px;font-weight:650;line-height:1.5}
+.actions{display:flex;align-items:center;gap:9px;margin-top:12px}
+.actions .btn{flex:1}
+.nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:14px}
+.nav button{border:1px solid #e1e5ed;border-radius:10px;padding:10px 3px;background:white;color:#525d6e;font-size:12px}
+.nav button.active{background:#efefff;border-color:var(--purple);color:var(--purple);font-weight:800}
+.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}
+.field label{font-size:13px;font-weight:700;color:#626d7d}
+.field input{width:100%}
+.notice{background:#fff6e8;color:#8b651d;border-radius:12px;padding:12px;font-size:13px;line-height:1.5}
+.bank{background:#f8fafc;border-radius:13px;padding:14px;margin:12px 0}
+.bankrow{padding:9px 0;border-bottom:1px solid #e3e7ee;font-size:14px;overflow-wrap:anywhere}
+.bankrow:last-child{border:0}
+.bankrow span{display:block;font-size:12px;color:#7d8796;margin-bottom:4px}
+.bankrow b{overflow-wrap:anywhere}
+.item{padding:13px 0;border-bottom:1px solid #e7eaf0;font-size:14px}
+.item:last-child{border:0}
+.status{display:inline-block;padding:4px 8px;border-radius:7px;background:#fff0d7;color:#93691d;font-size:12px;font-weight:700}
+.status.approved{background:#dcf8e9;color:#167b4e}
+.empty{text-align:center;padding:22px 8px;color:#9299a5;font-size:14px}
+footer{text-align:center;color:#9aa1ad;font-size:12px;padding:12px 0 25px}
+.small{font-size:12px;color:#8992a0}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#202938;color:white;padding:12px 17px;border-radius:12px;z-index:20;width:max-content;max-width:90%;font-size:14px;box-shadow:0 5px 20px #0002}
+
+/* CSKH */
+.chatbox{border:1px solid #e2e6ef;border-radius:15px;overflow:hidden;background:#f8fafc}
+.chathead{background:#6254c9;color:white;padding:14px;font-weight:800}
+.chathead small{display:block;font-weight:400;font-size:12px;margin-top:4px;opacity:.85}
+.chatmessages{height:320px;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:10px}
+.message{max-width:85%;padding:10px 12px;border-radius:13px;font-size:14px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+.message.botmsg{background:white;border:1px solid #e4e7ed;align-self:flex-start}
+.message.usermsg{background:#6254c9;color:white;align-self:flex-end}
+.msgtime{font-size:10px;opacity:.65;margin-top:4px}
+.chatinput{display:flex;gap:8px;padding:10px;background:white;border-top:1px solid #e4e7ed}
+.chatinput input{flex:1;width:100%}
+.chatinput button{padding:10px 13px}
+.support-shortcuts{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.support-shortcuts button{border:1px solid #deddf7;background:#f5f4ff;color:#6254c9;border-radius:9px;padding:9px;font-size:12px}
+@media(max-width:380px){
+ .nav button{font-size:11px}
+ .chatmessages{height:280px}
+ .card{padding:14px}
+}
+@media(min-width:600px){.wrap{padding:22px}.card{padding:22px}}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="head">
+  <div>
+   <div class="logo">QDZ Project</div>
+   <div class="sub">Thuê & Khởi Tạo Bot Free Fire</div>
+  </div>
+  <button class="btn light" id="logout" onclick="logout()" style="display:none">Đăng xuất</button>
+ </div>
+</header>
+
+<div class="wrap">
+
+<section id="auth" class="card">
+ <h1 id="authTitle">Đăng nhập</h1>
+ <p>Đăng nhập để quản lý tài khoản và lịch sử mua bot.</p>
+ <div class="nav">
+  <button id="loginTab" class="active" onclick="showAuth('login')">Đăng nhập</button>
+  <button id="registerTab" onclick="showAuth('register')">Đăng ký</button>
+ </div>
+ <form onsubmit="authSubmit(event)">
+  <div class="field"><label>Tên tài khoản</label><input id="username" required minlength="3" maxlength="24" autocomplete="username" placeholder="Nhập tên tài khoản"></div>
+  <div class="field"><label>Mật khẩu</label><input id="password" required minlength="6" type="password" autocomplete="current-password" placeholder="Ít nhất 6 ký tự"></div>
+  <div class="field hidden" id="confirmField"><label>Nhập lại mật khẩu</label><input id="confirm" type="password" minlength="6" placeholder="Nhập lại mật khẩu"></div>
+  <button class="btn full" id="authButton" type="submit">Đăng nhập</button>
+ </form>
+ <p class="small" style="margin-top:13px">Tài khoản được lưu trên trình duyệt của thiết bị hiện tại.</p>
+</section>
+
+<section id="app" class="hidden">
+
+ <div class="card">
+  <h1>Thuê & Khởi Tạo Bot Free Fire</h1>
+  <p>Quản lý dịch vụ và tài khoản của bạn.</p>
+  <div class="line" style="margin-top:14px">
+   <div><div class="small">Xin chào</div><b id="welcome">Tài khoản</b></div>
+   <div style="text-align:right"><div class="small">Số dư ví</div><b id="balanceTop" style="font-size:21px">0 ₫</b></div>
+  </div>
+ </div>
+
+ <div class="nav">
+  <button class="active" id="tabBuy" onclick="page('buy')">🛒 Mua bot</button>
+  <button id="tabDeposit" onclick="page('deposit')">💳 Nạp tiền</button>
+  <button id="tabHistory" onclick="page('history')">📋 Lịch sử</button>
+  <button id="tabSupport" onclick="page('support')">💬 CSKH</button>
+ </div>
+
+ <!-- MUA BOT -->
+ <div id="buyPage">
+  <div class="section-title">1. CHỌN LOẠI BOT</div>
+
+  <div class="bot active" data-bot="normal" onclick="chooseBot('normal')">
+   <div class="bottop"><h3>Bot Thường</h3><span class="tag">Cơ bản</span></div>
+   <div class="price">Từ 30k/3d • 60k/7d • 140k/tháng</div>
+   <p style="margin-top:10px">Tên mặc định tự sinh: Bot FF + số nhỏ trên đầu</p>
+  </div>
+
+  <div class="bot" data-bot="custom" onclick="chooseBot('custom')">
+   <div class="bottop"><h3>Bot Tên Riêng</h3><span class="tag hot">Hot</span></div>
+   <div class="price">100k/7d • 250k/tháng</div>
+   <div class="desc">Cho phép tùy chỉnh câu lệnh, lời chào và câu thoại phản hồi.</div>
+  </div>
+
+  <div class="bot" data-bot="music" onclick="chooseBot('music')">
+   <div class="bottop"><h3>Bot Nhạc + Tên</h3><span class="tag vip">VIP</span></div>
+   <div class="price">140k/7d • 350k/tháng</div>
+   <div class="desc" style="color:#946c2d">Phát nhạc phòng VIP, tên riêng và bio.</div>
+  </div>
+
+  <div class="section-title">2. CHỌN THỜI GIAN SỬ DỤNG</div>
+
+  <div class="durations">
+   <button class="duration active" data-days="3" onclick="chooseDays(3)"><strong>3 ngày</strong><small>30.000 ₫</small></button>
+   <button class="duration" data-days="7" onclick="chooseDays(7)"><strong>7 ngày</strong><small>60.000 ₫</small></button>
+   <button class="duration" data-days="14" onclick="chooseDays(14)"><strong>14 ngày</strong><small>120.000 ₫</small></button>
+   <button class="duration" data-days="30" onclick="chooseDays(30)"><strong>30 ngày</strong><small>140.000 ₫</small></button>
+  </div>
+
+  <div class="customday">
+   <span>Hoặc nhập số ngày:</span>
+   <input id="customDays" type="number" min="1" max="365" value="3" onchange="customDayChange()" oninput="customDayChange()">
+   <span>ngày</span>
+  </div>
+
+  <div class="wallet">
+   <div class="line"><span style="color:#7d8796">Số dư ví hiện tại:</span><b id="balance">0 ₫</b></div>
+   <div class="line"><b>Tổng tiền thanh toán:</b><b class="total" id="total">30.000 ₫</b></div>
+   <div id="buyWarning" class="warning" style="margin-top:12px">Số dư ví của bạn không đủ để tạo bot này!</div>
+   <div class="actions">
+    <button class="btn red" onclick="page('deposit')">Nạp Tiền Ngay</button>
+    <button class="btn" onclick="buyBot()">Mua Bot</button>
+   </div>
+   <p class="small" style="margin-top:10px">Giá được tính theo loại bot và thời gian sử dụng đã chọn.</p>
+  </div>
+ </div>
+
+ <!-- NẠP TIỀN -->
+ <div id="depositPage" class="hidden">
+  <div class="card">
+   <h2>💳 Nạp tiền vào tài khoản</h2>
+   <p>Tạo yêu cầu nạp và theo dõi trạng thái trong lịch sử.</p>
+
+   <div class="bank">
+    <div class="bankrow"><span>Ngân hàng nhận</span><b>MB Bank (MBBank)</b></div>
+    <div class="bankrow">
+     <span>Số tài khoản</span><b>98677778888999</b>
+     <button class="btn light" style="padding:6px 10px;margin-top:7px" onclick="copyText('98677778888999')">Sao chép STK</button>
+    </div>
+    <div class="bankrow"><span>Tên người nhận</span><b>Lưu Gia Bảo</b></div>
+    <div class="bankrow">
+     <span>Nội dung chuyển khoản</span><b id="transferContent">NAP QDZ</b>
+     <button class="btn light" style="padding:6px 10px;margin-top:7px" onclick="copyText($('transferContent').textContent)">Sao chép nội dung</button>
+    </div>
+   </div>
+
+   <div class="notice">Hãy kiểm tra kỹ thông tin người nhận trong ứng dụng ngân hàng trước khi chuyển khoản.</div>
+
+   <div class="field"><label>Số tiền muốn nạp (₫)</label><input type="number" id="depositAmount" min="1000" step="1000" placeholder="Ví dụ: 50000"></div>
+   <div class="field"><label>Mã giao dịch / ghi chú (không bắt buộc)</label><input id="depositNote" maxlength="100" placeholder="Nhập mã giao dịch nếu có"></div>
+
+   <button class="btn full" onclick="submitDeposit()">Chuyển tiền</button>
+
+   <p class="small" style="margin-top:10px">Sau khi tạo yêu cầu, nhấn “Kiểm Tra Lệnh Nạp” trong lịch sử để bắt đầu quy trình xử lý 5 phút.</p>
+  </div>
+ </div>
+
+ <!-- LỊCH SỬ -->
+ <div id="historyPage" class="hidden">
+  <div class="card">
+   <h2>📋 Lịch sử mua bot</h2>
+   <div id="purchaseHistory" class="empty">Chưa có lịch sử mua bot.</div>
+  </div>
+  <div class="card">
+   <h2>💳 Lịch sử nạp tiền</h2>
+   <p>Mỗi yêu cầu có thể được kiểm tra một lần.</p>
+   <div id="depositHistory" class="empty">Chưa có yêu cầu nạp tiền.</div>
+  </div>
+ </div>
+
+ <!-- CSKH -->
+ <div id="supportPage" class="hidden">
+  <div class="card">
+   <h2>💬 Chăm Sóc Khách Hàng</h2>
+   <p>Gửi nội dung cần hỗ trợ bên dưới.</p>
+
+   <div class="support-shortcuts">
+    <button onclick="quickSupport('Tôi cần hỗ trợ nạp tiền.')">Hỗ trợ nạp tiền</button>
+    <button onclick="quickSupport('Tôi cần hỗ trợ mua bot.')">Hỗ trợ mua bot</button>
+    <button onclick="quickSupport('Tôi muốn kiểm tra đơn hàng.')">Kiểm tra đơn hàng</button>
+   </div>
+
+   <div class="chatbox">
+    <div class="chathead">
+     QDZ CSKH
+     <small>Hỗ trợ tự động • Tin nhắn được lưu trên trình duyệt</small>
+    </div>
+    <div id="chatMessages" class="chatmessages"></div>
+    <form class="chatinput" onsubmit="sendSupportMessage(event)">
+     <input id="supportInput" maxlength="500" placeholder="Nhập tin nhắn..." autocomplete="off" required>
+     <button class="btn" type="submit">Gửi</button>
+    </form>
+   </div>
+
+   <p class="small" style="margin-top:10px">Đây là khung hỗ trợ tự động trong trang web, chưa kết nối nhân viên qua Telegram.</p>
+  </div>
+ </div>
+
+</section>
+
+<footer>QDZ Project • Giao diện quản lý thuê bot</footer>
+</div>
+
+<div id="toast" class="hidden"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const KEY='qdz_project_accounts_v1';
+const SESSION='qdz_project_session_v1';
+
+let authMode='login';
+let selectedBot='normal';
+let selectedDays=3;
+let toastTimer=null;
+let depositTimer=null;
+
+const botNames={
+ normal:'Bot Thường',
+ custom:'Bot Tên Riêng',
+ music:'Bot Nhạc + Tên'
+};
+
+function priceFor(bot,days){
+ const table={
+  normal:{3:30000,7:60000,14:120000,30:140000},
+  custom:{3:50000,7:100000,14:175000,30:250000},
+  music:{3:70000,7:140000,14:245000,30:350000}
+ };
+ if(table[bot][days])return table[bot][days];
+
+ const daily={normal:60000/7,custom:100000/7,music:140000/7};
+ return Math.round(daily[bot]*days/1000)*1000;
+}
+
+function money(n){
+ return Number(n||0).toLocaleString('vi-VN')+' ₫';
+}
+
+function accounts(){
+ try{return JSON.parse(localStorage.getItem(KEY)||'{}')}
+ catch(e){return {}}
+}
+
+function saveAccounts(data){
+ localStorage.setItem(KEY,JSON.stringify(data));
+}
+
+function getUser(){
+ const name=localStorage.getItem(SESSION);
+ return name?accounts()[name]||null:null;
+}
+
+function updateUser(user){
+ const all=accounts();
+ all[user.username]=user;
+ saveAccounts(all);
+}
+
+function toast(message){
+ const el=$('toast');
+ el.textContent=message;
+ el.classList.remove('hidden');
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>el.classList.add('hidden'),2600);
+}
+
+function showAuth(mode){
+ authMode=mode;
+ $('authTitle').textContent=mode==='login'?'Đăng nhập':'Tạo tài khoản';
+ $('authButton').textContent=mode==='login'?'Đăng nhập':'Đăng ký tài khoản';
+ $('confirmField').classList.toggle('hidden',mode==='login');
+ $('confirm').required=mode==='register';
+ $('loginTab').classList.toggle('active',mode==='login');
+ $('registerTab').classList.toggle('active',mode==='register');
+ $('password').autocomplete=mode==='login'?'current-password':'new-password';
+}
+
+function authSubmit(e){
+ e.preventDefault();
+
+ const username=$('username').value.trim();
+ const password=$('password').value;
+ const all=accounts();
+
+ if(!/^[a-zA-Z0-9_-]{3,24}$/.test(username)){
+  toast('Tên tài khoản dùng 3–24 chữ cái, số, _ hoặc -.');
+  return;
+ }
+
+ if(password.length<6){
+  toast('Mật khẩu cần ít nhất 6 ký tự.');
+  return;
+ }
+
+ if(authMode==='register'){
+  if(all[username]){
+   toast('Tên tài khoản đã tồn tại.');
+   return;
+  }
+
+  if(password!==$('confirm').value){
+   toast('Mật khẩu nhập lại không khớp.');
+   return;
+  }
+
+  all[username]={
+   username,
+   password,
+   balance:0,
+   purchases:[],
+   deposits:[],
+   supportMessages:[],
+   createdAt:new Date().toISOString()
+  };
+
+  saveAccounts(all);
+  localStorage.setItem(SESSION,username);
+  toast('Tạo tài khoản thành công!');
+  renderApp();
+
+ }else{
+  const user=all[username];
+
+  if(!user||user.password!==password){
+   toast('Tên tài khoản hoặc mật khẩu không đúng.');
+   return;
+  }
+
+  localStorage.setItem(SESSION,username);
+  toast('Đăng nhập thành công!');
+  renderApp();
+ }
+}
+
+function logout(){
+ localStorage.removeItem(SESSION);
+ $('auth').classList.remove('hidden');
+ $('app').classList.add('hidden');
+ $('logout').style.display='none';
+ clearInterval(depositTimer);
+ showAuth('login');
+}
+
+function renderApp(){
+ const user=getUser();
+
+ if(!user){
+  $('auth').classList.remove('hidden');
+  $('app').classList.add('hidden');
+  $('logout').style.display='none';
+  return;
+ }
+
+ if(!Array.isArray(user.purchases))user.purchases=[];
+ if(!Array.isArray(user.deposits))user.deposits=[];
+ if(!Array.isArray(user.supportMessages))user.supportMessages=[];
+
+ updateUser(user);
+
+ $('auth').classList.add('hidden');
+ $('app').classList.remove('hidden');
+ $('logout').style.display='block';
+ $('welcome').textContent=user.username;
+ $('transferContent').textContent='NAP '+user.username.toUpperCase();
+
+ processDueDeposits();
+ renderBalance();
+ renderHistory();
+ renderChat();
+ updatePrice();
+ startDepositTimer();
+}
+
+function renderBalance(){
+ const user=getUser();
+ if(!user)return;
+
+ $('balance').textContent=money(user.balance);
+ $('balanceTop').textContent=money(user.balance);
+
+ $('buyWarning').textContent=user.balance<priceFor(selectedBot,selectedDays)
+  ?'Số dư ví của bạn không đủ để tạo bot này!'
+  :'Số dư đủ để thanh toán đơn hàng.';
+}
+
+function page(name){
+ const pages=['buy','deposit','history','support'];
+
+ pages.forEach(p=>{
+  $(p+'Page').classList.toggle('hidden',p!==name);
+  $('tab'+p[0].toUpperCase()+p.slice(1)).classList.toggle('active',p===name);
+ });
+
+ if(name==='history')renderHistory();
+ if(name==='support')renderChat();
+}
+
+function chooseBot(bot){
+ selectedBot=bot;
+
+ document.querySelectorAll('.bot').forEach(el=>{
+  el.classList.toggle('active',el.dataset.bot===bot);
+ });
+
+ updatePrice();
+}
+
+function chooseDays(days){
+ selectedDays=days;
+ $('customDays').value=days;
+
+ document.querySelectorAll('.duration').forEach(el=>{
+  el.classList.toggle('active',Number(el.dataset.days)===days);
+ });
+
+ updatePrice();
+}
+
+function customDayChange(){
+ let days=parseInt($('customDays').value,10);
+ if(!Number.isFinite(days))return;
+
+ days=Math.max(1,Math.min(365,days));
+ selectedDays=days;
+ $('customDays').value=days;
+
+ document.querySelectorAll('.duration').forEach(el=>{
+  el.classList.toggle('active',Number(el.dataset.days)===days);
+ });
+
+ updatePrice();
+}
+
+function updatePrice(){
+ $('total').textContent=money(priceFor(selectedBot,selectedDays));
+ renderBalance();
+}
+
+function buyBot(){
+ const user=getUser();
+
+ if(!user){
+  toast('Vui lòng đăng nhập.');
+  return;
+ }
+
+ const cost=priceFor(selectedBot,selectedDays);
+
+ if(user.balance<cost){
+  toast('Không đủ số dư! Vui lòng nạp tiền thêm.');
+  page('deposit');
+  return;
+ }
+
+ user.balance-=cost;
+
+ user.purchases.unshift({
+  id:'QDZ'+Date.now(),
+  bot:selectedBot,
+  botName:botNames[selectedBot],
+  days:selectedDays,
+  price:cost,
+  time:new Date().toISOString(),
+  status:'Chờ kích hoạt'
+ });
+
+ updateUser(user);
+ renderApp();
+ toast('Đã ghi nhận đơn hàng.');
+ page('history');
+}
+
+/* TẠO ĐƠN NẠP */
+function submitDeposit(){
+ const user=getUser();
+ if(!user)return;
+
+ const amount=Number($('depositAmount').value);
+
+ if(!Number.isSafeInteger(amount)||amount<1000){
+  toast('Vui lòng nhập số tiền từ 1.000 ₫ trở lên.');
+  return;
+ }
+
+ const deposit={
+  id:'NAP'+Date.now(),
+  amount,
+  note:$('depositNote').value.trim(),
+  time:new Date().toISOString(),
+  status:'Chờ duyệt',
+  checkRequestedAt:null,
+  approvedAt:null,
+  credited:false
+ };
+
+ user.deposits.unshift(deposit);
+ updateUser(user);
+
+ $('depositAmount').value='';
+ $('depositNote').value='';
+
+ renderHistory();
+ toast('Đã tạo yêu cầu nạp tiền.');
+ page('history');
+}
+
+/* NÚT KIỂM TRA ĐƠN NẠP */
+function checkDeposit(id){
+ const user=getUser();
+ if(!user)return;
+
+ const deposit=(user.deposits||[]).find(x=>x.id===id);
+ if(!deposit)return;
+
+ if(deposit.status==='Đã duyệt'){
+  toast('Đơn nạp này đã được xử lý.');
+  return;
+ }
+
+ if(deposit.checkRequestedAt){
+  toast('Đơn đã được gửi xử lý. Vui lòng chờ đủ 5 phút.');
+  return;
+ }
+
+ deposit.checkRequestedAt=Date.now();
+ deposit.status='Đang xử lý';
+
+ updateUser(user);
+ renderHistory();
+ startDepositTimer();
+
+ toast('Đã bắt đầu xử lý. Thời gian chờ là 5 phút.');
+}
+
+/* CẬP NHẬT CÁC ĐƠN ĐÃ ĐẾN HẠN */
+function processDueDeposits(){
+ const user=getUser();
+ if(!user)return;
+
+ let changed=false;
+ const now=Date.now();
+
+ (user.deposits||[]).forEach(deposit=>{
+  if(
+   deposit.checkRequestedAt &&
+   !deposit.credited &&
+   now-deposit.checkRequestedAt>=5*60*1000
+  ){
+   /*
+    * Chỉ cập nhật số dư nội bộ trên trình duyệt.
+    * Không xác minh hoặc tạo ra giao dịch ngân hàng.
+    */
+   deposit.status='Đã duyệt';
+   deposit.approvedAt=new Date().toISOString();
+   deposit.credited=true;
+   user.balance=Number(user.balance||0)+Number(deposit.amount||0);
+   changed=true;
+  }
+ });
+
+ if(changed){
+  updateUser(user);
+  renderBalance();
+  renderHistory();
+  toast('Đã cập nhật đơn nạp và số dư nội bộ.');
+ }
+}
+
+/* CẬP NHẬT ĐẾM NGƯỢC */
+function startDepositTimer(){
+ clearInterval(depositTimer);
+
+ depositTimer=setInterval(()=>{
+  if(!getUser()){
+   clearInterval(depositTimer);
+   return;
+  }
+
+  const before=JSON.stringify(
+   (getUser()?.deposits||[]).map(x=>({
+    id:x.id,status:x.status,credited:x.credited
+   }))
+  );
+
+  processDueDeposits();
+
+  const user=getUser();
+  if(!user)return;
+
+  const after=JSON.stringify(
+   (user.deposits||[]).map(x=>({
+    id:x.id,status:x.status,credited:x.credited
+   }))
+  );
+
+  if(before!==after)renderHistory();
+  else updateCountdownLabels();
+ },1000);
+}
+
+function formatRemaining(ms){
+ const seconds=Math.max(0,Math.ceil(ms/1000));
+ const minutes=Math.floor(seconds/60);
+ const remain=seconds%60;
+ return minutes+' phút '+String(remain).padStart(2,'0')+' giây';
+}
+
+function updateCountdownLabels(){
+ const user=getUser();
+ if(!user)return;
+
+ (user.deposits||[]).forEach(deposit=>{
+  if(!deposit.checkRequestedAt||deposit.credited)return;
+
+  const el=document.getElementById('timer-'+deposit.id);
+  if(!el)return;
+
+  const remaining=5*60*1000-(Date.now()-deposit.checkRequestedAt);
+
+  el.textContent=remaining>0
+   ?'Thời gian xử lý còn: '+formatRemaining(remaining)
+   :'Đang cập nhật trạng thái...';
+ });
+}
+
+/* LỊCH SỬ */
+function renderHistory(){
+ const user=getUser();
+ if(!user)return;
+
+ const purchases=user.purchases||[];
+ const deposits=user.deposits||[];
+
+ $('purchaseHistory').innerHTML=purchases.length?purchases.map(x=>`
+  <div class="item">
+   <b>${escapeHTML(x.botName)}</b>
+   <div class="price">${x.days} ngày • ${money(x.price)}</div>
+   <div class="small" style="margin:6px 0">${escapeHTML(new Date(x.time).toLocaleString('vi-VN'))}</div>
+   <span class="status">${escapeHTML(x.status)}</span>
+   <div class="small" style="margin-top:5px">Mã đơn: ${escapeHTML(x.id)}</div>
+  </div>`).join(''):'<div class="empty">Chưa có lịch sử mua bot.</div>';
+
+ $('depositHistory').innerHTML=deposits.length?deposits.map(x=>{
+  const approved=x.status==='Đã duyệt';
+  let action='';
+
+  if(approved){
+   action='<p style="color:#167b4e;font-weight:700;margin-top:8px">✓ Số dư nội bộ đã được cập nhật.</p>';
+  }else if(x.checkRequestedAt){
+   action=`
+    <div class="small" id="timer-${escapeHTML(x.id)}" style="margin-top:9px">
+     Đang tính thời gian xử lý...
+    </div>
+    <button class="btn light full" style="margin-top:9px" disabled>
+     Đang xử lý
+    </button>`;
+  }else{
+   action=`
+    <button class="btn full" style="margin-top:10px"
+     onclick="checkDeposit('${escapeHTML(x.id)}')">
+     🔎 Kiểm Tra Lệnh Nạp
+    </button>`;
+  }
+
+  return `
+   <div class="item">
+    <b>Nạp ${money(x.amount)}</b>
+    <div class="small" style="margin:6px 0">
+     ${escapeHTML(new Date(x.time).toLocaleString('vi-VN'))}
+    </div>
+    <span class="status ${approved?'approved':''}">${escapeHTML(x.status)}</span>
+    ${x.note?'<div class="small" style="margin-top:5px">Ghi chú: '+escapeHTML(x.note)+'</div>':''}
+    <div class="small" style="margin-top:5px">Mã yêu cầu: ${escapeHTML(x.id)}</div>
+    ${action}
+   </div>`;
+ }).join(''):'<div class="empty">Chưa có yêu cầu nạp tiền.</div>';
+
+ updateCountdownLabels();
+}
+
+/* CSKH */
+function renderChat(){
+ const user=getUser();
+ if(!user)return;
+
+ if(!Array.isArray(user.supportMessages)){
+  user.supportMessages=[];
+  updateUser(user);
+ }
+
+ const messages=user.supportMessages;
+
+ if(!messages.length){
+  $('chatMessages').innerHTML=`
+   <div class="message botmsg">
+    Xin chào ${escapeHTML(user.username)}! 👋
+    <br>Bạn cần hỗ trợ về nạp tiền, mua bot hay đơn hàng?
+    <div class="msgtime">CSKH • Tự động</div>
+   </div>`;
+  return;
+ }
+
+ $('chatMessages').innerHTML=messages.map(m=>`
+  <div class="message ${m.from==='user'?'usermsg':'botmsg'}">
+   ${escapeHTML(m.text)}
+   <div class="msgtime">${escapeHTML(m.time||'')}</div>
+  </div>`).join('');
+
+ $('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+}
+
+function sendSupportMessage(event){
+ event.preventDefault();
+
+ const input=$('supportInput');
+ const text=input.value.trim();
+ if(!text)return;
+
+ const user=getUser();
+ if(!user)return;
+
+ if(!Array.isArray(user.supportMessages))user.supportMessages=[];
+
+ user.supportMessages.push({
+  from:'user',
+  text,
+  time:new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})
+ });
+
+ const reply=getSupportReply(text);
+
+ user.supportMessages.push({
+  from:'bot',
+  text:reply,
+  time:new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})
+ });
+
+ /* Giữ tối đa 100 tin nhắn gần nhất */
+ user.supportMessages=user.supportMessages.slice(-100);
+
+ updateUser(user);
+ input.value='';
+ renderChat();
+}
+
+function quickSupport(text){
+ $('supportInput').value=text;
+ $('supportInput').focus();
+}
+
+function getSupportReply(text){
+ const t=text.toLowerCase();
+
+ if(t.includes('nạp')||t.includes('tiền')||t.includes('chuyển khoản')){
+  return 'Bạn hãy mở mục Nạp tiền để tạo yêu cầu. Sau đó vào Lịch sử, chọn đơn cần xử lý và nhấn “Kiểm Tra Lệnh Nạp”. Bạn có thể theo dõi trạng thái tại đó.';
+ }
+
+ if(t.includes('mua bot')||t.includes('mua')){
+  return 'Bạn hãy vào mục Mua bot, chọn loại bot và số ngày sử dụng. Hệ thống sẽ hiển thị tổng tiền trước khi bạn bấm Mua Bot.';
+ }
+
+ if(t.includes('đơn hàng')||t.includes('lịch sử')||t.includes('kiểm tra')){
+  return 'Bạn hãy mở mục Lịch sử để xem các đơn mua bot và yêu cầu nạp tiền. Trạng thái của từng đơn được hiển thị ngay bên dưới.';
+ }
+
+ if(t.includes('xin chào')||t.includes('hello')||t==='hi'){
+  return 'Xin chào bạn! QDZ CSKH có thể hướng dẫn bạn về nạp tiền, mua bot và lịch sử đơn hàng.';
+ }
+
+ return 'QDZ CSKH đã nhận được tin nhắn của bạn. Bạn có thể chọn các nút hỗ trợ nhanh bên trên hoặc mô tả cụ thể vấn đề về nạp tiền, mua bot hay lịch sử đơn hàng.';
+}
+
+function escapeHTML(value){
+ return String(value??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+/* SAO CHÉP */
+function copyText(value){
+ if(navigator.clipboard&&window.isSecureContext){
+  navigator.clipboard.writeText(value)
+   .then(()=>toast('Đã sao chép!'))
+   .catch(()=>fallbackCopy(value));
+ }else{
+  fallbackCopy(value);
+ }
+}
+
+function fallbackCopy(value){
+ const input=document.createElement('textarea');
+ input.value=value;
+ input.style.position='fixed';
+ input.style.opacity='0';
+ document.body.appendChild(input);
+ input.select();
+
+ try{
+  document.execCommand('copy');
+  toast('Đã sao chép!');
+ }catch(e){
+  toast('Hãy sao chép thủ công: '+value);
+ }
+
+ input.remove();
+}
+
+/* KHỞI ĐỘNG */
+if(getUser()){
+ renderApp();
+}else{
+ showAuth('login');
+}
+</script>
+
+</body>
+</html>
